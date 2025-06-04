@@ -10,7 +10,17 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
+->withMiddleware(function (Middleware $middleware) {
+        // CORS debe ir antes que cualquier otro middleware
+    $middleware->prepend(\Illuminate\Http\Middleware\HandleCors::class);
 
+        // Alias para middlewares personalizados o de terceros
+     $middleware->alias([
+        'auth'     => \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth:api' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+    ]);
+})
+        
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
